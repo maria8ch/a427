@@ -1,4 +1,10 @@
+import java.io.IOException;
 import java.lang.Math;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Main
@@ -37,13 +43,23 @@ public class Main
         Point[] problem2result = computeLimitOfFunctionFromProblem2();
         for (Point p : problem2result)
         {
-            System.out.println("x=" + p.x + "; y=" + p.y);
+            System.out.println("x = " + p.x + "; y = " + p.y);
         }
         // Problem 3
         System.out.println("Problem 3");
+        // Part a
+        // Part b
         double x_3b = 0.75;
         double y_3b = linearInterpolator(x_3b);
-        System.out.println("x_3b = " + x_3b + "; y_3b = " +y_3b);
+        System.out.println("x_3b = " + x_3b + "; y_3b = " + y_3b);
+        // Part c
+        double x_3c = 0.75;
+        double y_3c = NevilleInterpolator(x_3c);
+        System.out.println("x_3c = " + x_3c + "; y_3c =" + y_3c);
+        // Part d
+        double x_3d = 0.75d;
+        double y_3d = 1.0d / (1.0d + 25.0d*x_3d*x_3d);
+        System.out.println("Actual value = " + y_3d);
     }
 
     //Here I have my functions, in order of question, more or less.
@@ -232,7 +248,8 @@ public class Main
 
 
     //Problem 3
-    public static Point[] readTheFile()
+
+    public static Point[] readTheFileFake()
     {
         Point[] result = new Point[5];
         result[0] = new Point(-1.0, 0.03846154);
@@ -244,18 +261,93 @@ public class Main
         return result;
     }
 
-    public static double linearInterpolator(double x)
+    public static Point[] readTheFile(String pathToFile)
     {
-        double y = x;
+        List<Point> allPoints = new ArrayList<Point>();
+        try
+        {
+            List<String> lines = Files.readAllLines(Paths.get(pathToFile), StandardCharsets.UTF_8);
+            for( String line : lines )
+            {
+                String[] parts = line.split(",");
+                double x = Double.valueOf(parts[0]);
+                double y = Double.valueOf(parts[1]);
 
+                allPoints.add(new Point(x,y));
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
 
-        //TODO: implement this function
-
-
-
-        return y;
+        return allPoints.toArray(new Point[1]);
     }
 
+
+
+
+    public static double linearInterpolator(double x)
+    {
+        // read the file
+        Point[] dataPoints = readTheFile("/Users/maria/hw1.dat");
+
+        //find the left and right points between which the X is located
+        Point leftPoint = null;
+        Point rightPoint = null;
+
+        for( int i = 0; i < dataPoints.length - 1; i++)
+        {
+            if( dataPoints[i].x <= x && x <= dataPoints[i+1].x )
+            {
+                // we found it!
+                leftPoint = dataPoints[i];
+                rightPoint = dataPoints[i+1];
+                break;
+            }
+        }
+
+        // Interpolate Y for the given X
+        double yright = rightPoint.y;
+        double yleft = leftPoint.y;
+        double xright = rightPoint.x;
+        double xleft = leftPoint.x;
+
+        double tanAlpha = (yright - yleft) / (xright - xleft);
+        double dx = xright - xleft;
+        double dy = dx * tanAlpha;
+        double y_3b = yleft + dy;
+
+        return y_3b;
+    }
+
+    public static double NevilleInterpolator(double x)
+    {
+        double y_3c = x;
+
+        //double P_i = y_3c
+
+
+
+        /* So the algorithm is:
+        1. Order interpolation points in x.
+        2. Set Pi = yi
+        3. Determine C1,i, D1,i (linear interpolation)
+        4. Check convergence
+        5. If not adequate construct P01
+        6. Construct Cm,i, Dm,i
+        7. Check for convergence, if too large
+        8. Construct P01...m; loop to 6.
+        9. If OK, Stop and get error estimate.
+        */
+
+
+
+
+
+
+        return y_3c;
+    }
 
 
 
