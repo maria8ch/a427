@@ -283,9 +283,7 @@ public class Main
 
         return allPoints.toArray(new Point[1]);
     }
-
-
-
+        //TODO: do a plot of the points
 
     public static double linearInterpolator(double x)
     {
@@ -320,35 +318,55 @@ public class Main
 
         return y_3b;
     }
+    private static class Polynomial
+    {
+        double value;
+        int startIndex;
+        int endIndex;
+
+        public Polynomial(double value, int startIndex, int endIndex)
+        {
+            this.value = value;
+            this.startIndex = startIndex;
+            this.endIndex = endIndex;
+        }
+    }
 
     public static double NevilleInterpolator(double x)
     {
-        double y_3c = x;
+        Point[] points = readTheFile("/Users/maria/hw1.dat");
 
-        //double P_i = y_3c
+        Polynomial[] polynomials = new Polynomial[points.length];
+        // initialize the polynomials of zero order
+        for (int i = 0; i < points.length; i++ )
+        {
+            polynomials[i] = new Polynomial(points[i].y, i, i);
+        }
 
+        // Neville....
+        while (polynomials.length > 1)
+        {
+            Polynomial[] nextLevelPolynomials = new Polynomial[polynomials.length - 1];
 
+            for(int i = 0; i < polynomials.length - 1; i++)
+            {
+                Polynomial headPolynomial = polynomials[i];
+                Polynomial tailPolynomial = polynomials[i+1];
 
-        /* So the algorithm is:
-        1. Order interpolation points in x.
-        2. Set Pi = yi
-        3. Determine C1,i, D1,i (linear interpolation)
-        4. Check convergence
-        5. If not adequate construct P01
-        6. Construct Cm,i, Dm,i
-        7. Check for convergence, if too large
-        8. Construct P01...m; loop to 6.
-        9. If OK, Stop and get error estimate.
-        */
+                Point headPoint = points[headPolynomial.startIndex];
+                Point tailPoint = points[tailPolynomial.endIndex];
+                double headX = headPoint.x;
+                double tailX = tailPoint.x;
 
+                Polynomial nextP = new Polynomial( ((x - headX)* tailPolynomial.value - (x - tailX)* headPolynomial.value)/(tailX - headX), headPolynomial.startIndex, tailPolynomial.endIndex);
+                nextLevelPolynomials[i] = nextP;
+            }
 
+            polynomials = nextLevelPolynomials;
+        }
 
-
-
-
-        return y_3c;
+        return polynomials[0].value;
     }
-
 
 
 }
