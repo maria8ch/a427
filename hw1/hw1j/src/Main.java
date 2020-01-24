@@ -64,7 +64,6 @@ public class Main
 
     //Here I have my functions, in order of question, more or less.
 
-
     public static float findSmallestFloatForSubtraction()
     {
         /* For my 1-epsilon =/= 1 expression, max_bad is the 'worst" guess for epsilon (0), with min_good being the lowest
@@ -106,7 +105,7 @@ public class Main
         /*
         For my 1+epsilon =/= 1 expression, the concept is the same as 1a. Again, max_bad is the 'worst" guess for
         epsilon (0), with min_good being the lowest "acceptable" value for epsilon (0.5 as initial guess). These are
-        once againg my two boundaries, with true epsilon being somewhere between. The loop works the same way as 1a,
+        once again my two boundaries, with true epsilon being somewhere between. The loop works the same way as 1a,
         and uses the midpoint to arrive at true epsilon. The loop runs while the midpoint exists between the two.
         Upon there not being a midpoint between the boundaries, aka, it equals one of the boundaries, the loop stops,
         as it has arrived at the lowest epsilon that the computer no longer recognizes as a "number".
@@ -201,7 +200,7 @@ public class Main
         return whereAmI;
     }
 
-    // To find the smallest positive representable float, I am using the same principle as 1c, but power 1/2 instead.
+    // To find the smallest positive representable float, I am using the same principle as 1c, but in the other direction.
     public static float findSmallestRepresentableFloat()
     {
         /* since we know what 0 is, the smallest positive representable float is between 0 and 1. Having a step of 1/2
@@ -222,21 +221,27 @@ public class Main
     and 1; 4 bits between 1 and 2. Each bit represents 0.125 before 1 on the line, and 0.25 after 1, so we get different
     values for epsilon depending on which side of 1 we're looking at. C makes sense because of the dynamic range that is
     possible for single float by IEEE- 10^38 is the power limit (this matches) because of the 8 bits allowed for storing
-    the power. The largest number that fits in that is 228. 2^228 is roughly 10^38. D makes sense because of
+    the power. The largest number that fits in that is 228. 2^228 is roughly 10^38. D makes sense because by sacrificing
+    a bit of precision for a smaller power we get the minimum number to be 0.00000014E-38, which is really 1.4E-45.
+    Basically, we take the bites accessible to the mantissa and give them to the power storage.
      */
 
 
     //Problem 2
-    // TODO: write explanation
+
+    /* The numerical result jumps around the analytical limit of 1/2 and becomes more unstable the closer to 0 it comes
+    numerically. This makes sense because to get the analytical limit L'Hopital's Derivative Rule had to be applied, and
+    the computer doesn't know to do that when it plugs values in.
+     */
 
     public static Point[] computeLimitOfFunctionFromProblem2()
     {
-        int count = 4; //TODO: make it 40
+        int count = 40; // how many iterations we will do
         Point[] result = new Point[count];
-        double x_start = 1.0E-7;
+        double x_start = 1.0E-7; // the starting value of x
         double x = x_start;
 
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < count; i++) // the numeric evaluation
         {
             double y = (1.0d - Math.cos(x)) / (x * x);
             result[i] = new Point(x, y);
@@ -249,6 +254,7 @@ public class Main
 
     //Problem 3
 
+    // attempt to "read the file" before I figured out how to do it properly. Used this to test my functions for correctness.
     public static Point[] readTheFileFake()
     {
         Point[] result = new Point[5];
@@ -264,6 +270,9 @@ public class Main
     public static Point[] readTheFile(String pathToFile)
     {
         List<Point> allPoints = new ArrayList<Point>();
+        /* it wouldn't work until I let it throw an exception... Not sure entirely what this is other than it's an error
+        that pops up when it can't find the file.
+         */
         try
         {
             List<String> lines = Files.readAllLines(Paths.get(pathToFile), StandardCharsets.UTF_8);
@@ -283,7 +292,6 @@ public class Main
 
         return allPoints.toArray(new Point[1]);
     }
-        //TODO: do a plot of the points
 
     public static double linearInterpolator(double x)
     {
@@ -305,12 +313,13 @@ public class Main
             }
         }
 
-        // Interpolate Y for the given X
+        // Interpolate Y for the given X, with y and x coordinates of the points to the left or right of X named these:
         double yright = rightPoint.y;
         double yleft = leftPoint.y;
         double xright = rightPoint.x;
         double xleft = leftPoint.x;
 
+        // actual linear interpolation  here
         double tanAlpha = (yright - yleft) / (xright - xleft);
         double dx = xright - xleft;
         double dy = dx * tanAlpha;
@@ -318,8 +327,10 @@ public class Main
 
         return y_3b;
     }
+
     private static class Polynomial
     {
+        //every polynomial used in Neville's algorithm has 3 components:
         double value;
         int startIndex;
         int endIndex;
@@ -334,34 +345,49 @@ public class Main
 
     public static double NevilleInterpolator(double x)
     {
+        //read in our file- you will need to change this path!!!
         Point[] points = readTheFile("/Users/maria/hw1.dat");
 
         Polynomial[] polynomials = new Polynomial[points.length];
-        // initialize the polynomials of zero order
+        // initialize the zero-order polynomials
         for (int i = 0; i < points.length; i++ )
         {
             polynomials[i] = new Polynomial(points[i].y, i, i);
         }
 
-        // Neville....
+        // Please welcome Invocation of Neville to the stage! Ahem, here's the implementation:
         while (polynomials.length > 1)
         {
+            /* the number of total polynomials is 1 less than the amount of data points- from the theorem that states
+            exactly one nth-order polynomial can be built through n+1 points. This is the back end of that and it builds
+            up to the nth-order polynomial.
+             */
             Polynomial[] nextLevelPolynomials = new Polynomial[polynomials.length - 1];
 
             for(int i = 0; i < polynomials.length - 1; i++)
             {
+                /* each polynomial is comprised of two neighboring polynomials. headPolynomial is the "first one" from the
+                top if we drew a side-ways tree that converges into our highest possible order polynomial. tailPolynomial
+                is the next one.
+                 */
                 Polynomial headPolynomial = polynomials[i];
                 Polynomial tailPolynomial = polynomials[i+1];
-
+                /* Because polynomials are labeled P_nm, using the previous logic, we get headX representing
+                n of headPolynomial, and tailX representing m of tailPolynomial. These become the indeces of the next
+                polynomial.
+                 */
                 Point headPoint = points[headPolynomial.startIndex];
                 Point tailPoint = points[tailPolynomial.endIndex];
                 double headX = headPoint.x;
                 double tailX = tailPoint.x;
-
+                //this is just the equation where we plug everything in
                 Polynomial nextP = new Polynomial( ((x - headX)* tailPolynomial.value - (x - tailX)* headPolynomial.value)/(tailX - headX), headPolynomial.startIndex, tailPolynomial.endIndex);
                 nextLevelPolynomials[i] = nextP;
             }
 
+            /* take all the higher level polynomials and save them. This will repeat until we have a single one, our 4th
+            order in this example.
+             */
             polynomials = nextLevelPolynomials;
         }
 
