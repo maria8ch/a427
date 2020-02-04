@@ -296,7 +296,7 @@ public class Main
     public static double linearInterpolator(double x)
     {
         // read the file
-        Point[] dataPoints = readTheFile("/Users/maria/hw1.dat");
+        Point[] dataPoints = readTheFile("hw1.dat");
 
         //find the left and right points between which the X is located
         Point leftPoint = null;
@@ -321,8 +321,11 @@ public class Main
 
         // actual linear interpolation  here
         double tanAlpha = (yright - yleft) / (xright - xleft);
-        double dx = xright - xleft;
+        // TRQ: problem with following line:
+        // double dx = xright - xleft;
+        double dx = x - xleft;
         double dy = dx * tanAlpha;
+        System.out.println("debug: " + yleft + " " + dx + " " + dy);
         double y_3b = yleft + dy;
 
         return y_3b;
@@ -346,7 +349,7 @@ public class Main
     public static double NevilleInterpolator(double x)
     {
         //read in our file- you will need to change this path!!!
-        Point[] points = readTheFile("/Users/maria/hw1.dat");
+        Point[] points = readTheFile("hw1.dat");
 
         Polynomial[] polynomials = new Polynomial[points.length];
         // initialize the zero-order polynomials
