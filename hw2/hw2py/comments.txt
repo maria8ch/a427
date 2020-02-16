@@ -1,0 +1,16 @@
+correctness (12/12)
+
+HMO: I got confused by the Euler and RK plots because you plotted
+velocity, not "x".
+
+
+flexible  (5/6)
+
+Given the complications of Leapfrog, more comments would be very
+helpful.  Document z_half, etc.
+
+speed (2/2)
+
+No issues.
+
+Total: 19/20
