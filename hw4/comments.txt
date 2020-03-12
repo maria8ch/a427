@@ -1,0 +1,17 @@
+correctness (12/12)
+
+All good.
+
+flexible  (5.5/6)
+
+You should check that the interval contains a minimum.
+
+speed (2/2)
+No issues.
+
+To answer your question at the end: the "goodness" benchmark is not as
+good as you would expect, particularly since the errors in v_inf and
+r0 are correlated.
+
+Total: 19.5/20.
+
