@@ -45,38 +45,21 @@ and provide a linear estimate of y at x = 0.75.
 
 (d) The actual function tabulated above is y = 1/(1+25x<sup>2</sup>). Compare the actual value at x = 0.75 with the linear interpolation and the 4th order polynomial interpolation, and comment on why one is more accurate than the other.
 
+# [HW 2](https://github.com/maria8ch/a427/tree/master/hw2)
 
-[HW 2](https://github.com/maria8ch/a427/tree/master/hw2)
+## Homework 2: Ordinary differential equations
 
-1. Write a program (or programs) to integrate up to four sets of coupled differential equations (so it can handle the problems below) using
-the Euler method, fourth order Runge-Kutta, and Leapfrog. (Note:
-Leapfrog only applies to special cases.) For Runge-Kutta, you may use
-a packaged routine such as available in scipy or Numerical Recipes. If
-you do used a packaged routine, be sure to use one with a fixed
-timestep and order so that testing the convergence can be
-easily performed.
-2. Use your program to solve the differential equation for x(t):
-d
-2x
-dt2
-+ x = 0;
-with the initial conditions x(0) = 1, x0
-(0) = 0. Note that this has the
-analytical solution: x = cos(t)
-(a) Integrate the equation for 0 ≤ t ≤ 30 using each of the methods,
-and step sizes of 1, .3, .1, .03, and .01. Comment on the behavior
-of the solutions.
-(b) Plot log(|xnumerical(30)−xexact(30)|) as a function of log(stepsize)
-and check for the expected convergence of the error term.
+### 1. 
+Write a program (or programs) to integrate up to four sets of coupled differential equations (so it can handle the problems below) using the Euler method, fourth order Runge-Kutta, and Leapfrog. (Note: Leapfrog only applies to special cases.) For Runge-Kutta, you may use a packaged routine such as available in scipy or Numerical Recipes. If you do used a packaged routine, be sure to use one with a fixed timestep and order so that testing the convergence can be easily performed.
+### 2. 
+Use your program to solve the differential equation for x(t): d<sup>2<sup>x/dt<sup>2<sup> + x = 0; with the initial conditions x(0) = 1, x'(0) = 0. Note that this has the analytical solution: x = cos(t)
+
+(a) Integrate the equation for 0 ≤ t ≤ 30 using each of the methods, and step sizes of 1, .3, .1, .03, and .01. Comment on the behavior of the solutions.
+
+(b) Plot log(|x*<sub>numerical<sub>*(30)−x*<sub>exact<sub>*(30)|) as a function of log(*stepsize*) and check for the expected convergence of the error term.
+
 3. Now try the two dimensional orbit described by the potential:
-Φ = −
-1
-√
-1 + x
-2 + y
-2
-.
-The orbits are given by the coupled differential equations:
+Φ = −1/√1 + x<sup>2<sup> + y<sup>2<sup> . The orbits are given by the coupled differential equations:
 d
 2x
 dt2
@@ -98,20 +81,15 @@ y
 2 + y
 2
 )
-3/2
-.
-(a) Integrate this for 0 ≤ t ≤ 100 for the initial conditions x = 1, y =
-0, x0 = 0, y0 = .3. Try this with either Leapfrog or Runge-Kutta
-and step sizes from .01 to 1. Plot x vs. y for these integrations.
-(b) Plot the energy E = (x
-02 + y
-02
-)/2 + Φ(x, y) as a function of time
-for your integrations.
+3/2 .
+(a) Integrate this for 0 ≤ t ≤ 100 for the initial conditions x = 1, y = 0, x' = 0, y' = .3. Try this with either Leapfrog or Runge-Kutta and step sizes from .01 to 1. Plot x vs. y for these integrations.
+
+(b) Plot the energy E = (x02 + y02)/2 + Φ(x, y) as a function of time for your integrations.
 
 
-[HW 3](https://github.com/maria8ch/a427/tree/master/hw3)
+# [HW 3](https://github.com/maria8ch/a427/tree/master/hw3)
 
+## Homework 3: Root finding
 
 1. Write a program to find the roots of one-dimensional equations using
 
@@ -126,7 +104,9 @@ Here M is the “mean anomoly”, an angle that increases linearly in time; E is
 
 2. It is frequently required that the Kepler problem be solved to the maximum precision available (i.e. to round-off) as quickly as possible. Attempt to do this with your Kepler solver. Which method, Bisection or Newton-Raphson, is better? Use your solver to plot sin(E) vs. cos(E) for 20 equally spaced values of M between 0 and 2π for an e = 0.9 orbit.
 
-[HW 4](https://github.com/maria8ch/a427/tree/master/hw4)
+# [HW 4](https://github.com/maria8ch/a427/tree/master/hw4)
+
+## Homework 4: 
 
 1. Write a program to find the minimum of a function of one variable
 using the Golden Search method.
@@ -145,48 +125,34 @@ where vinf is the asymptotic velocity and r0 is a characteristic radius.
 Using the Golden Search method, and assuming that vinf is 100 km/s,
 find the r0 that gives the best fit of the above formula to the following
 “data”:
-robs (kiloparsecs) vobs(km/s)
-1.0 12.09
-2.0 47.53
-3.0 51.80
-4.0 63.28
-5.0 90.33
-6.0 84.32
-7.0 92.23
-8.0 94.84
-9.0 99.37
-10.0 94.42
+
+robs (kiloparsecs)| vobs(km/s)
+---------------|---------------
+1.0 | 12.09
+2.0 | 47.53
+3.0 | 51.80
+4.0 | 63.28
+5.0 | 90.33
+6.0 | 84.32
+7.0 | 92.23
+8.0 | 94.84
+9.0 | 99.37
+10.0 | 94.42
+
 This data is available at
-http://faculty.washington.edu/trq/astr427/rot.csv. As a criteria for goodness of fit, use the standard least squares formula:
-E =
-N
-Xdata
-i=1
-(vobs − vmodel(robs))2
-.
-That is, the observational error is the same for each data point.
-3. Now relax the constraint on vinf and use a package (I recommend
-scipy.optimize.minimize with the “Powell” method) to fit the above
-data for both r0 and vinf .
-Note that the above data were generated from a model with r0 = 3,
-vinf = 100 and a Gaussian error with standard deviation of 10 km/s.
-Comment on the differences between your results and the model values.
+http://faculty.washington.edu/trq/astr427/rot.csv. As a criteria for goodness of fit, use the standard least squares formula: E = NXdatai=1(vobs − vmodel(robs))2 . That is, the observational error is the same for each data point.
 
-[HW 5](https://github.com/maria8ch/a427/tree/master/hw5)
+3. Now relax the constraint on vinf and use a package (I recommend scipy.optimize.minimize with the “Powell” method) to fit the above data for both r0 and vinf. Note that the above data were generated from a model with r0 = 3, vinf = 100 and a Gaussian error with standard deviation of 10 km/s. Comment on the differences between your results and the model values.
 
-1. Write a (non-GPU) program to calculate π by integrating the area of a
-circle of radius 1 with the Monte-Carlo method. You may use a systemprovided random number generator. The Python random module says
-it uses the Mersenne Twister which I mentioned in class as a quality
-generator. Plot how the error in the estimated value of π changes with
-the number of points used to evaluate the integral; does this follow the
-expected error for a Monte Carlo method?
-2. Implement the same Monte-Carlo method using CUDA on a CUDA
-capable machine, such as the hyak gpu nodes. For those familiar with
-Python, this may be easier using PyCUDA. This can be installed on
-the hyak machines with pip install pycuda --user, or I have it installed in /usr/lusers/trq/.local/lib/python3.6/site-packages,
-which requires that you module load contrib/python. You can interactively grab a GPU node on hyak with
+# [HW 5](https://github.com/maria8ch/a427/tree/master/hw5)
+
+## Homework 5: GPU 
+
+1. Write a (non-GPU) program to calculate π by integrating the area of a circle of radius 1 with the Monte-Carlo method. You may use a systemprovided random number generator. The Python random module says it uses the Mersenne Twister which I mentioned in class as a quality generator. Plot how the error in the estimated value of π changes with the number of points used to evaluate the integral; does this follow the expected error for a Monte Carlo method?
+
+2. Implement the same Monte-Carlo method using CUDA on a CUDA capable machine, such as the hyak gpu nodes. For those familiar with Python, this may be easier using PyCUDA. This can be installed on the hyak machines with pip install pycuda --user, or I have it installed in /usr/lusers/trq/.local/lib/python3.6/site-packages, which requires that you module load contrib/python. You can interactively grab a GPU node on hyak with 
+```
 srun -p stf-gpu -A stf --nodes=1 --mem=120G --time=1:00:00
 --gres=gpu:P100:1 --pty /bin/bash
-There is also an stf-int-gpu queue for interactive use, and a build-gpu
-queue for building and installing GPU code. Verify that you get an accurate estimate of π, and compare the time taken with the CUDA
-implementation with the time taken by the non-CUDA implementation.
+```
+There is also an stf-int-gpu queue for interactive use, and a build-gpu queue for building and installing GPU code. Verify that you get an accurate estimate of π, and compare the time taken with the CUDA implementation with the time taken by the non-CUDA implementation.
