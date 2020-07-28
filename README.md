@@ -8,8 +8,8 @@ This repo is homework for Astr427 taken at UW in Winter 2019. Each homework is i
 
 ### 1. Floating point representation
 For the float data type, write a program to empirically (i.e., by performing tests on addition and subtraction operations within your program) determine the following “Machine constants” for your computer:
-(a) The smallest &epsilon; such that 1.0 − epsilon =/= 1.0
-(b) The smallest &epsilon; such that 1.0 + epsilon =/= 1.0
+(a) The smallest &epsilon; such that 1.0 − &epsilon; &ne; 1.0
+(b) The smallest &epsilon; such that 1.0 + &epsilon; &ne; 1.0
 (c) The maximum representable number
 (d) The minimum representable positive number
 Comment on why the numbers you get are expected based on the IEEE 754 representation.
